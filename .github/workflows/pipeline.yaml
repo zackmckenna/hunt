@@ -19,7 +19,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{github.event.repository.name}}:${{ github.sha }}
 
       - name: Push To Docker Hub
-        run: docker push ${{github.event.repository.name}}:${{ github.sha }}
+        run: docker push ${{github.repository}}:${{ github.sha }}
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
