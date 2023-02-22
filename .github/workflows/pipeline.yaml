@@ -16,10 +16,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{basename(github.repository)}}:${{ github.sha }}
+        run: docker build . --file Dockerfile --tag ${{github.repository | replace('/', '-')}}:${{ github.sha }}
 
       - name: Push To Docker Hub
-        run: docker push ${{basename(github.repository)}}:${{ github.sha }}
+        run: docker push ${{github.repository | replace('/', '-')}}:${{ github.sha }}
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -38,10 +38,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            docker stop ${{basename(github.repository)}} || true
-            docker rm ${{basename(github.repository)}} || true
-            docker pull ${{basename(github.repository)}}:${{ github.sha }}
+            docker stop ${{github.repository | replace('/', '-')}} || true
+            docker rm ${{github.repository | replace('/', '-')}} || true
+            docker pull ${{github.repository | replace('/', '-')}}:${{ github.sha }}
             docker run -d \
-              --name ${{basename(github.repository)}} \
+              --name ${{github.repository | replace('/', '-')}} \
               -p 1112:1112 \
-              ${{basename(github.repository)}}:${{ github.sha }}
+              ${{github.repository | replace('/', '-')}}:${{ github.sha }}
