@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - dev
-      - master
+      - main
 
 jobs:
   deploy-to-server:
