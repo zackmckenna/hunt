@@ -16,10 +16,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push the Docker image
-        run: 
-          docker build . --file Dockerfile --tag ${{github.event.repository.name}}:${{ github.sha }} |
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{github.event.repository.name}}:${{ github.sha }}
-          
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/${{github.event.repository.name}}:latest
+
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
@@ -39,8 +40,8 @@ jobs:
           script: |
             docker stop ${{github.event.repository.name}} || true
             docker rm ${{github.event.repository.name}} || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{github.event.repository.name}}:${{ github.sha }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{github.event.repository.name}}:latest
             docker run -d \
               --name ${{github.event.repository.name}} \
               -p 1112:1112 \
-              ${{github.event.repository.name}}:${{ github.sha }}
+              ${{github.event.repository.name}}:latest
