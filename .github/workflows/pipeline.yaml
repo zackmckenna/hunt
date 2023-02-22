@@ -41,6 +41,4 @@ jobs:
             docker stop ${{github.event.repository.name}} || true
             docker rm ${{github.event.repository.name}} || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{github.event.repository.name}}:latest
-            docker run ${{ secrets.DOCKER_USERNAME }}/${{github.event.repository.name}}:latest \
-              --name ${{github.event.repository.name}} \
-              -p 1112:1112
+            docker run -p 1112:1112 ${{ secrets.DOCKER_USERNAME }}/${{github.event.repository.name}}:latest
